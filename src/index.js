@@ -5,5 +5,3 @@
 //     el: '#app',
 //     render: h => h(App)
 // })
-
-console.log(another)
