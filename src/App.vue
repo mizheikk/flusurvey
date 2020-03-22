@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { getGeolocation } from './location'
+
 export default {
     name: 'App',
 
@@ -28,8 +30,20 @@ export default {
         return {
             fluStatus: null,
             age: null,
-            postalCode: null
+            postalCode: null,
+            coordinates: null
         }
+    },
+
+    methods: {
+        getPosition: async function () {
+            let coords = await getGeolocation({})
+            this.coordinates = coords
+        }
+    },
+
+    mounted() {
+        this.getPosition()
     }
 }
 </script>

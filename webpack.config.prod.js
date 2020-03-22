@@ -1,9 +1,10 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
+require("babel-polyfill");
 const path = require('path')
 
 module.exports = {
-    entry: './src/index.js',
+    entry: ['babel-polyfill', './src/index.js'],
     output: {
         path: path.resolve(__dirname, 'public'),
         filename: 'main.js'
