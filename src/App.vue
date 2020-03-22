@@ -17,6 +17,13 @@
 
         <label for="postalCode">Postinumero</label>
         <input type="text" id="postalCode" v-model="postalCode">
+
+        <p>Koordinaatit:<br />
+        Latitude: {{ coordinates ? coordinates.coords.latitude : '' }}<br />
+        Longitude: {{ coordinates ? coordinates.coords.longitude : '' }}
+        </p>
+
+        <button @click="submit">Lähetä</button>
     </div>
 </template>
 
@@ -39,6 +46,10 @@ export default {
         getPosition: async function () {
             let coords = await getGeolocation({})
             this.coordinates = coords
+        },
+
+        submit: function () {
+            alert('TALLENNETAAN!')
         }
     },
 
