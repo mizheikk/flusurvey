@@ -32,7 +32,8 @@ import * as firebase from "firebase/app"
 import "firebase/auth"
 import "firebase/firestore"
 import { getGeolocation } from './location'
-import { signIn } from './auth'
+import { getUser, signIn } from './auth'
+import { save } from './save'
 
 const firebaseConfig = {
   apiKey: "AIzaSyAr4NYGEctzvYqf8oKSOpTLWK71630GD80",
@@ -61,9 +62,18 @@ export default {
 
     methods: {
 
-        signIn: async function () {
-            this.user = await signIn(firebase)
-            console.log(this.user)
+        initUser: async function () {
+            let signedIn = await signIn(firebase)
+            if(signedIn) {
+                let that = this
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        that.user = user
+                    } else {
+                        that.user = false
+                    }
+                })
+            }
         },
 
         getPosition: async function () {
@@ -72,13 +82,29 @@ export default {
         },
 
         submit: function () {
-            alert('TALLENNETAAN!')
+            let data = {
+                user: this.user,
+                backgroundInfo: {
+                    age: this.age,
+                    postalCode: this.postalCode
+                },
+                answer: {
+                    fluStatus: this.fluStatus,
+                    coordinates: {
+                        latitude: this.coordinates.coords.latitude.toFixed(2),
+                        longitude: this.coordinates.coords.longitude.toFixed(2)
+                    },
+                    time: Date.now()
+                }
+            }
+
+            return save(firebase, data)
         }
     },
 
     mounted() {
 
-        this.signIn(firebase)
+        this.initUser(firebase)
         this.getPosition()
     }
 }
