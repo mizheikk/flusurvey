@@ -7,3 +7,16 @@
 // })
 
 console.log('hey')
+
+let test = {
+    test: "asdfsdf"
+}
+
+let another = {
+    ...test,
+    ...{
+        newkey: 'adsfasdf'
+    }
+}
+
+console.log(another)
