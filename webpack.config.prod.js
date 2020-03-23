@@ -10,7 +10,10 @@ module.exports = {
         filename: 'main.js'
     },
     resolve: {
-        extensions: ['*', '.js', '.vue']
+        extensions: ['*', '.js', '.vue'],
+        alias: {
+            Utilities: path.resolve(__dirname, 'src/utilities/')
+        }
     },
     module: {
         rules: [

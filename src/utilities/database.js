@@ -1,7 +1,6 @@
-export { save }
+import { firebase } from 'Utilities/firebase'
 
-function save(firebase, data) {
-
+export function save(data) {
     let db = firebase.firestore()
     let userId = data.user.uid
 

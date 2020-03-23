@@ -28,32 +28,16 @@
 </template>
 
 <script>
-import * as firebase from "firebase/app"
-import "firebase/auth"
-import "firebase/firestore"
-import { getGeolocation } from './location'
-import { getUser, signIn } from './auth'
-import { save } from './save'
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAr4NYGEctzvYqf8oKSOpTLWK71630GD80",
-  authDomain: "flusurvey-1f96b.firebaseapp.com",
-  databaseURL: "https://flusurvey-1f96b.firebaseio.com",
-  projectId: "flusurvey-1f96b",
-  storageBucket: "flusurvey-1f96b.appspot.com",
-  messagingSenderId: "1006223751736",
-  appId: "1:1006223751736:web:8280c12956d775d9f144cd",
-  measurementId: "G-VM9L5YSEKN"
-}
-
-firebase.initializeApp(firebaseConfig)
+import { getGeolocation } from 'Utilities/location'
+import { initUser } from 'Utilities/auth'
+import { save } from 'Utilities/database'
 
 export default {
     name: 'App',
 
     data() {
 
-        if(localStorage.getItem('data') !== null) {
+        if  (localStorage.getItem('data') !== null) {
 
             let data = JSON.parse(localStorage.data)
 
@@ -61,7 +45,8 @@ export default {
                 fluStatus: null,
                 age: data.age,
                 postalCode: data.postalCode,
-                coordinates: null
+                coordinates: null,
+                user: null
             }
         }
 
@@ -69,24 +54,15 @@ export default {
             fluStatus: null,
             age: null,
             postalCode: null,
-            coordinates: null
+            coordinates: null,
+            user: null
         }
     },
 
     methods: {
-
         initUser: async function () {
-            let signedIn = await signIn(firebase)
-            if(signedIn) {
-                let that = this
-                firebase.auth().onAuthStateChanged(function(user) {
-                    if (user) {
-                        that.user = user
-                    } else {
-                        that.user = false
-                    }
-                })
-            }
+            let user = await initUser()
+            this.user = user
         },
 
         getPosition: async function () {
@@ -111,13 +87,12 @@ export default {
                 }
             }
 
-            return save(firebase, data)
+            return save(data)
         }
     },
 
     mounted() {
-
-        this.initUser(firebase)
+        this.initUser()
         this.getPosition()
     }
 }
