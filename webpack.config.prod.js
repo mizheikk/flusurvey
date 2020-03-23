@@ -1,7 +1,15 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const PurgecssPlugin = require('purgecss-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 require("babel-polyfill");
 const path = require('path')
+const glob = require('glob')
+
+const PATHS = {
+    src: path.join(__dirname, 'src')
+  }
 
 module.exports = {
     entry: ['babel-polyfill', './src/index.js'],
@@ -44,6 +52,21 @@ module.exports = {
                 ]
             },
             {
+                test: /\.scss$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader'
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }
+                ]
+            },
+            {
                 test: /\.(png|svg|jpg|gif)$/,
                 use: [
                     'file-loader'
@@ -56,6 +79,13 @@ module.exports = {
             template: './src/index.html',
             filename: './index.html'
         }),
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new MiniCssExtractPlugin({
+            filename: 'css/flusurvey.css'
+        }),
+        new PurgecssPlugin({
+            paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true })
+        }),
+        new BundleAnalyzerPlugin()
     ]
 }

@@ -1,30 +1,58 @@
 <template>
-    <div>
-        <p>Onko flunssaoireita?</p>
+    <section class="section">
+        <div class="columns is-centered">
+            <div class="column is-narrow">
 
-        <input type="radio" id="fluPositive" value="1" v-model="fluStatus">
-        <label for="fluPositive">Kyllä</label>
+                <div class="container">
 
-        <input type="radio" id="fluNegative" value="0" v-model="fluStatus">
-        <label for="fluNegative">Ei</label>
+                    <h1 class="title">Flusurvey</h1>
 
-        <br />
+                    <div class="field">
+                        <label class="label">Onko flunssaoireita?</label>
+                        <div class="control">
+                            <label for="fluPositive" class="radio">
+                                <input type="radio" id="fluPositive" value="1" v-model="fluStatus">
+                                Kyllä
+                            </label>
+                            <label for="fluNegative" class="radio">
+                                <input type="radio" id="fluNegative" value="0" v-model="fluStatus">
+                                Ei
+                            </label>
+                        </div>
+                    </div>
 
-        <label for="age">Ikä</label>
-        <input type="number" id="age" step="1" v-model="age">
+                    <div class="field">
+                        <label for="age" class="label">Ikä</label>
+                        <div class="control">
+                            <input class="input" type="number" step="1" id="age" v-model="age">
+                        </div>
+                    </div>
 
-        <br />
+                    <div class="field">
+                        <label for="postalCode" class="label">Postinumero</label>
+                        <div class="control">
+                            <input class="input" type="text" id="postalCode" v-model="postalCode">
+                        </div>
+                    </div>
 
-        <label for="postalCode">Postinumero</label>
-        <input type="text" id="postalCode" v-model="postalCode">
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button is-primary" @click="submit">Lähetä</button>
+                        </div>
+                        <div class="control">
+                            <button class="button is-warning" @click="clearFields">Tyhjennä kentät</button>
+                        </div>
+                    </div>
 
-        <p>Koordinaatit:<br />
-        Latitude: {{ coordinates ? coordinates.coords.latitude.toFixed(2) : '' }}<br />
-        Longitude: {{ coordinates ? coordinates.coords.longitude.toFixed(2) : '' }}
-        </p>
+                    <p>Koordinaatit:<br />
+                        Latitude: {{ coordinates ? coordinates.coords.latitude.toFixed(2) : '' }}<br />
+                        Longitude: {{ coordinates ? coordinates.coords.longitude.toFixed(2) : '' }}
+                    </p>
 
-        <button @click="submit">Lähetä</button>
-    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </template>
 
 <script>
@@ -88,6 +116,12 @@ export default {
             }
 
             return save(data)
+        },
+
+        clearFields: function () {
+            this.fluStatus = null
+            this.age = null
+            this.postalCode = null
         }
     },
 
