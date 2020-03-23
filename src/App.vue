@@ -52,6 +52,19 @@ export default {
     name: 'App',
 
     data() {
+
+        if(localStorage.getItem('data') !== null) {
+
+            let data = JSON.parse(localStorage.data)
+
+            return {
+                fluStatus: null,
+                age: data.age,
+                postalCode: data.postalCode,
+                coordinates: null
+            }
+        }
+
         return {
             fluStatus: null,
             age: null,

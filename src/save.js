@@ -7,7 +7,8 @@ function save(firebase, data) {
 
     addCollection(db, userId, data.backgroundInfo)
     addAnswer(db, userId, data.answer)
-}
+    setLocalStorage(data)
+ }
 
 function addCollection(db, userId, data) {
     db.collection('users').doc(userId).set(data, { merge: true })
@@ -26,5 +27,12 @@ function addAnswer(db, userId, answer) {
     })
     .catch(function(error) {
         console.error("Error adding document: ", error);
-    });    
+    })  
+}
+
+function setLocalStorage(data) {
+    localStorage.setItem('data', JSON.stringify({
+        'age': data.backgroundInfo.age,
+        'postalCode': data.backgroundInfo.postalCode 
+    }))
 }
